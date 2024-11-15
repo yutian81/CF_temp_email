@@ -35,13 +35,16 @@ export default defineConfig({
       resolvers: [NaiveUiResolver()]
     }),
     VitePWA({
-      registerType: process.env.VITE_PWA_DISABLED == "true" ? null : 'autoUpdate',
+      registerType: null,
       devOptions: {
         enabled: true
       },
       workbox: {
         disableDevLogs: true,
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        globPatterns: [],
+        runtimeCaching: [],
+        navigateFallback: null,
+        cleanupOutdatedCaches: true,
       },
       manifest: {
         name: 'Temp Email',
