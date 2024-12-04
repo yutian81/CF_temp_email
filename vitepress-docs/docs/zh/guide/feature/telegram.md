@@ -1,5 +1,9 @@
 # 配置 Telegram Bot
 
+::: warning 注意
+worker 默认的 `worker.dev` 域名的证书是不被 telegram 支持的，配置 Telegram Bot 请使用自定义域名
+:::
+
 > [!NOTE]
 > 如果要使用 Telegram Bot, 请先绑定 `KV`
 >
@@ -9,9 +13,14 @@
 
 请先创建一个 Telegram Bot，然后获取 `token`，然后执行下面的命令，将 `token` 添加到 secrets 中
 
-你也可以在 Cloudflare 的 UI 界面中添加 `secrets`
+> [!NOTE]
+> 如果你觉得麻烦，也可以直接明文放在 `wrangler.toml` 中 `[vars]` 下面，但是不推荐这样做
+
+如果你是通过 UI 部署的，可以在 Cloudflare 的 UI 界面中添加到 `Variables and Secrets` 下面
 
 ```bash
+# 切换到 worker 目录
+cd worker
 pnpm wrangler secret put TELEGRAM_BOT_TOKEN
 ```
 

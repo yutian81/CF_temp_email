@@ -1,7 +1,11 @@
 <!-- markdownlint-disable-file MD004 MD024 MD034 MD036 -->
 # CHANGE LOG
 
-# main(v0.8.1)
+# main(v0.8.2)
+
+- feat: |Doc| 修复文档中的一些错误
+
+# v0.8.2
 
 - feat: |Doc| 更新 UI 安装的文档
 - feat: |UI| 对用户隐藏邮箱账号的 ID
@@ -14,6 +18,14 @@
 - feat: 支持转移邮件到其他用户
 
 ## v0.7.6
+
+### Breaking Changes
+
+UI 部署 worker 需要点击 Settings -> Runtime, 修改 Compatibility flags, 增加 `nodejs_compat`
+
+![worker-runtime](vitepress-docs/docs/public/ui_install/worker-runtime.png)
+
+### Changes
 
 - feat: 支持提前设置 bot info, 降低 telegram 回调延迟 (#441)
 - feat: 增加 telegram mini app 的 build 压缩包
