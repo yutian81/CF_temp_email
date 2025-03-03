@@ -4,8 +4,9 @@ import { createMimeMessage } from 'mimetext';
 import { Resend } from 'resend';
 import { WorkerMailer, WorkerMailerOptions } from 'worker-mailer';
 
+import i18n from '../i18n';
 import { CONSTANTS } from '../constants'
-import { getJsonSetting, getDomains, getIntValue, getBooleanValue, getStringValue, getJsonObjectValue } from '../utils';
+import { getJsonSetting, getDomains, getIntValue, getBooleanValue, getStringValue, getJsonObjectValue, getSplitStringListValue } from '../utils';
 import { GeoData } from '../models'
 import { handleListQuery } from '../common'
 import { HonoCustomType } from '../types';
@@ -136,7 +137,8 @@ export const sendMail = async (
         throw new Error("Invalid domain")
     }
     const user_role = c.get("userRolePayload");
-    const is_no_limit_send_balance = user_role && user_role === getStringValue(c.env.NO_LIMIT_SEND_ROLE);
+    const no_limit_roles = getSplitStringListValue(c.env.NO_LIMIT_SEND_ROLE);
+    const is_no_limit_send_balance = user_role && no_limit_roles.includes(user_role);
     // no need find noLimitSendAddressList if is_no_limit_send_balance
     const noLimitSendAddressList = is_no_limit_send_balance ?
         [] : await getJsonSetting(c, CONSTANTS.NO_LIMIT_SEND_ADDRESS_LIST_KEY) || [];
@@ -288,8 +290,10 @@ api.get('/api/sendbox', async (c) => {
 })
 
 api.delete('/api/sendbox/:id', async (c) => {
+    const lang = c.get("lang") || c.env.DEFAULT_LANG;
+    const msgs = i18n.getMessages(lang);
     if (!getBooleanValue(c.env.ENABLE_USER_DELETE_EMAIL)) {
-        return c.text("User delete email is disabled", 403)
+        return c.text(msgs.UserDeleteEmailDisabledMsg, 403)
     }
     const { address } = c.get("jwtPayload")
     const { id } = c.req.param();

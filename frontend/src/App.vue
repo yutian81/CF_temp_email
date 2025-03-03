@@ -1,6 +1,7 @@
 <script setup>
 import { darkTheme, NGlobalStyle, zhCN } from 'naive-ui'
 import { computed, onMounted } from 'vue'
+import { useScript } from '@unhead/vue'
 import { useI18n } from 'vue-i18n'
 import { useGlobalState } from './store'
 import { useIsMobile } from './utils/composables'
@@ -11,12 +12,15 @@ import { api } from './api'
 const {
   isDark, loading, useSideMargin, telegramApp, isTelegram
 } = useGlobalState()
+const adClient = import.meta.env.VITE_GOOGLE_AD_CLIENT;
+const adSlot = import.meta.env.VITE_GOOGLE_AD_SLOT;
 const { locale } = useI18n({});
 const theme = computed(() => isDark.value ? darkTheme : null)
 const localeConfig = computed(() => locale.value == 'zh' ? zhCN : null)
 const isMobile = useIsMobile()
 const showSideMargin = computed(() => !isMobile.value && useSideMargin.value);
-
+const showAd = computed(() => !isMobile.value && adClient && adSlot);
+const gridMaxCols = computed(() => showAd.value ? 8 : 12);
 
 onMounted(async () => {
 
@@ -36,6 +40,18 @@ onMounted(async () => {
     script.dataset.cfBeacon = `{ token: ${token} }`;
     document.body.appendChild(script);
   }
+
+  // check if google ad is enabled
+  if (showAd.value) {
+    useScript({
+      src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`,
+      async: true,
+      crossorigin: "anonymous",
+    });
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  }
+
 
   // check if telegram is enabled
   const enableTelegram = import.meta.env.VITE_IS_TELEGRAM;
@@ -63,9 +79,14 @@ onMounted(async () => {
     <n-spin description="loading..." :show="loading">
       <n-notification-provider container-style="margin-top: 60px;">
         <n-message-provider container-style="margin-top: 20px;">
-          <n-grid x-gap="12" :cols="12">
-            <n-gi v-if="showSideMargin" span="1"></n-gi>
-            <n-gi :span="!showSideMargin ? 12 : 10">
+          <n-grid x-gap="12" :cols="gridMaxCols">
+            <n-gi v-if="showSideMargin" span="1">
+              <div class="side" v-if="showAd">
+                <ins class="adsbygoogle" style="display:block" :data-ad-client="adClient" :data-ad-slot="adSlot"
+                  data-ad-format="auto" data-full-width-responsive="true"></ins>
+              </div>
+            </n-gi>
+            <n-gi :span="!showSideMargin ? gridMaxCols : (gridMaxCols - 2)">
               <div class="main">
                 <n-space vertical>
                   <n-layout style="min-height: 80vh;">
@@ -76,7 +97,12 @@ onMounted(async () => {
                 </n-space>
               </div>
             </n-gi>
-            <n-gi v-if="showSideMargin" span="1"></n-gi>
+            <n-gi v-if="showSideMargin" span="1">
+              <div class="side" v-if="showAd">
+                <ins class="adsbygoogle" style="display:block" :data-ad-client="adClient" :data-ad-slot="adSlot"
+                  data-ad-format="auto" data-full-width-responsive="true"></ins>
+              </div>
+            </n-gi>
           </n-grid>
           <n-back-top />
         </n-message-provider>

@@ -75,7 +75,7 @@
 | `ADMIN_USER_ROLE`                     | 文本      | admin 角色配置, 如果用户角色等于 ADMIN_USER_ROLE 则可以访问 admin 控制台 | `admin` |
 | `USER_ROLES`                          | JSON      | -                                                                        | 见下方  |
 | `DISABLE_ANONYMOUS_USER_CREATE_EMAIL` | 文本/JSON | 禁用匿名用户创建邮箱，如果设置为 true，则用户只能在登录后创建邮箱地址    | `true`  |
-| `NO_LIMIT_SEND_ROLE`                  | 文本      | 可以无限发送邮件的角色                                                   | `vip`   |
+| `NO_LIMIT_SEND_ROLE`                  | 文本      | 可以无限发送邮件的角色, 多个角色使用逗号分割 `vip,admin`                 | `vip`   |
 
 > [!NOTE] USER_ROLES 用户角色配置说明
 >
@@ -90,6 +90,7 @@
 
 | 变量名                    | 类型        | 说明                                             | 示例                  |
 | ------------------------- | ----------- | ------------------------------------------------ | --------------------- |
+| `DEFAULT_LANG`            | 文本        | Worker 错误信息默认语言, zh/en                   | `zh`                  |
 | `TITLE`                   | 文本        | 自定义前端页面网站标题，支持 html                | `Custom Title`        |
 | `ANNOUNCEMENT`            | 文本        | 自定义前端页面公告，支持 html                    | `Custom Announcement` |
 | `COPYRIGHT`               | 文本        | 自定义前端界面页脚文本，支持 html                | `Dream Hunter`        |
