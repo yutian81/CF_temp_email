@@ -10,16 +10,21 @@ jobs:
     name: Sync latest commits from upstream repo
     runs-on: ubuntu-latest
     if: ${{ github.event.repository.fork }}
+    permissions:
+      contents: write    # 允许修改代码文件
+      actions: write     # 允许修改工作流文件（关键权限）
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Sync upstream changes
-        id: sync
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
         with:
           upstream_sync_repo: dreamhunter2333/cloudflare_temp_email
           upstream_sync_branch: main
           target_sync_branch: main
-          target_repo_token: ${{ secrets.GITHUB_TOKEN }} # automatically generated, no need to set
+          exclude_files: |
+            .github/workflows/*~
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
           test_mode: false
