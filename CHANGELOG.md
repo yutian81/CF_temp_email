@@ -1,6 +1,13 @@
 <!-- markdownlint-disable-file MD004 MD024 MD034 MD036 -->
 # CHANGE LOG
 
+## main(v1.0.4)
+
+- feat: |UI| 优化极简模式主页, 增加全部邮件页面功能(删除/下载/附件/...), 可在 `外观` 中切换
+- feat: admin 账号设置页面增加 `邮件转发规则` 配置
+- feat: admin 账号设置页面增加 `禁止接收未知地址邮件` 配置
+- feat: 邮件页面增加 上一封/下一封 按钮
+
 ## v1.0.3
 
 - fix: 修复 github actions 部署问题
